@@ -1,0 +1,17 @@
+.x-title{
+    text-align: center;
+}
+
+.x-body {
+    width: 50%;
+    margin-inline: 25%;
+    margin-block: 3rem;
+    border: 1px solid grey;
+    box-shadow: 0.1rem 0.1rem grey;
+    border-radius: 1rem;
+    padding: 1rem;
+}
+
+.x-input {
+    margin-block: 0.5rem;
+}
