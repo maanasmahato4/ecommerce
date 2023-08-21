@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUsersApi } from "../api/users.api";
 import { useEffect, useState } from "react";
-import { Table, ActionIcon, Modal, TextInput, Button, Select } from "@mantine/core";
+import { Table, ActionIcon, Modal, TextInput, Button, Select, Flex } from "@mantine/core";
 import { IGetUsers } from "../types/auth.types";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
@@ -76,7 +76,10 @@ function User() {
 
   return (
     <section>
-      <Select label="Role" defaultValue={role}  data={SelectRoleData.map((option, idx) => ({ ...option, key: idx }))} onChange={(value: any) => setRoles(value)} />
+      <Flex direction="row" justify="space-between" wrap="wrap" mx="auto">
+        <div></div>
+        <Select label="Role" defaultValue={role} data={SelectRoleData.map((option, idx) => ({ ...option, key: idx }))} onChange={(value: any) => setRoles(value)} />
+      </Flex>
       <Table>
         <thead>
           <tr>

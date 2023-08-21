@@ -20,12 +20,13 @@ export class ProductsService {
 
     async GetProducts(req: Request): Promise<Array<Product>> {
         try {
-            if (req.query.category == "all") {
-                return await this.productModel.find();
+            let filter = {}
+            if (req.query.category) {
+                filter = {
+                    category: req.query.category
+                }
             }
-            else if (req.query.category != "all") {
-                return await this.productModel.find({ category: req.query.category });
-            }
+            return await this.productModel.find(filter);
         } catch (err) {
             throw new Error(err);
         }

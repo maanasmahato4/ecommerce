@@ -16,7 +16,7 @@ function Product() {
   const [opened, { open, close }] = useDisclosure(false);
   const { addProduct, getProducts } = useProductApi();
   const { getCategories } = useCategoryApi();
-  const [category, setCategory] = useState('all');
+  const [category, setCategory] = useState<string | undefined>(undefined);
 
   const queryClient = useQueryClient();
 
@@ -29,7 +29,7 @@ function Product() {
   }) */
 
   const productQuery = useQuery({
-    queryKey: ["products"],
+    queryKey: ["products", category],
     queryFn: async () => await getProducts(category)
   });
 
@@ -78,13 +78,22 @@ function Product() {
     return <h1>error..</h1>
   }
 
-  const CategorySelect = categoryQuery.data.map((item: { _id: string, category: string }) => {
-    return { value: item.category, label: item.category };
+  const CategorySelect = categoryQuery.data.map((item: { _id: string, category: string }, idx: number) => {
+    return { value: item.category, label: item.category, key: idx + 1 };
   });
  
 
+
   return (
     <section style={{ position: "relative", minHeight: "100vh" }}>
+      <Flex direction="row" justify="space-between" wrap="wrap" mx="auto">
+        <div></div>
+        <Select label="Role" style={{width: "20%"}} defaultValue={category}  data={[
+        {value: undefined, label: "all", key: 0},
+        ...CategorySelect
+      ]} onChange={(value: any) => setCategory(value)} />
+      </Flex>
+      
       <Flex direction="row" justify="center" wrap="wrap" mx="auto">
         {productQuery.data.map((product: IGetProduct, idx: number) => {
           return <ProductCard key={idx} {...product} />
