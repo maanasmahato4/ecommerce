@@ -1,4 +1,4 @@
-import { IGetProduct, IProduct } from "../types/product.types"
+import { IGetProduct } from "../types/product.types"
 import { Card, Image, Text, Badge, Group, Button, ActionIcon } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import { Fragment, useContext } from "react";
@@ -7,7 +7,6 @@ import { IconTrash, IconEdit } from "@tabler/icons-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useProductApi } from "../api/products.api";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { ProductContext } from "../context/product.context";
 
 function ProductCard(product: IGetProduct) {
@@ -15,7 +14,7 @@ function ProductCard(product: IGetProduct) {
   const { setProduct } = useContext(ProductContext);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { updateProduct, deleteProduct } = useProductApi();
+  const { deleteProduct } = useProductApi();
   const { _id, brandName, category, discount, imageUrls, inStock, price, productDescription, productName } = product;
 
   const handleDeleteMutation = useMutation(
@@ -52,7 +51,7 @@ function ProductCard(product: IGetProduct) {
               <Text>${price}</Text>
             </div>
           </Group>
-          <Text style={{ marginBlock: "10px" }}>{productDescription.slice(0, 100)}...<Link to={`/admin/about/${_id}`}>see more</Link></Text>
+          <Text style={{ marginBlock: "10px" }}>{productDescription.slice(0, 100)}...<span style={{color: "purple", cursor: "pointer", textDecoration: "underline"}} onClick={() => {setProduct(product); navigate(`/admin/about/${_id}`)}}>see more</span></Text>
           {
             decodedToken.roles === "admin" || decodedToken.roles === "employee"
               ?

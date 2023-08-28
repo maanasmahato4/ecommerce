@@ -10,7 +10,7 @@ import { useDisclosure } from "@mantine/hooks";
 function User() {
   const { getUsers, updateUser, deleteUser } = useUsersApi();
   const queryClient = useQueryClient();
-  const [role, setRoles] = useState<string | undefined>(undefined);
+  const [role, setRoles] = useState<string | undefined>("all");
   const [selectedUser, setSelecetedUser] = useState({ _id: "", username: "", email: "", roles: "" });
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -68,7 +68,7 @@ function User() {
   }
 
   const SelectRoleData = [
-    { value: undefined, label: "all" },
+    { value: "all", label: "all" },
     { value: "user", label: "user" },
     { value: "employee", label: "employee" },
     { value: "admin", label: "admin" },

@@ -7,6 +7,11 @@ function AdminApp() {
   const [opened, setOpened] = useState(false);
   return (
     <AppShell
+      styles={{
+        main: {
+          background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
+        },
+      }}
       footer={
         <Footer height={60} p="md">
           Application footer
@@ -19,6 +24,7 @@ function AdminApp() {
           <Link to="/admin/" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Products</Link>
           <Link to="/admin/categories" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Category</Link>
           <Link to="/admin/users" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Users</Link>
+          <Link to="/admin/orders" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Orders</Link>
         </Navbar>
       }
       header={

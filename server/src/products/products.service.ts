@@ -19,14 +19,52 @@ export class ProductsService {
     }
 
     async GetProducts(req: Request): Promise<Array<Product>> {
+        // page
+        let page: number = 0;
+        if (typeof req.query.page == "string") {
+            page = (parseInt(req.query.page) - 1) || 0;
+        }
+
+        // limit
+        let limit: number = 10;
+        if (typeof req.query.limit == "string") {
+            limit = parseInt(req.query.limit) || 10;
+        }
+
+        // search
+        const search: any = req.query.search || "";
+
+        // sort
+        let sort: any = req.query.sort || ["price"];
+        if(typeof req.query.sort == "string"){
+            req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
+        }
+        let sortBy = {};
+        if(sort[1]){
+            sortBy[sort[0]] = sort[1];
+        } else {
+            sortBy[sort[0]] = "asc";
+        }
+
+        // category
+        let category = req.query.category || "all"
+
+        // filtering
+        if(search){
+            page = 0;
+            limit = Infinity;
+        }
+
+        let filter: any = {
+            productName: new RegExp(search, "i")
+        }
+
+        if(!(category === "all")){
+            filter.category = req.query.category;
+        }
+     
         try {
-            let filter = {}
-            if (req.query.category) {
-                filter = {
-                    category: req.query.category
-                }
-            }
-            return await this.productModel.find(filter);
+            return await this.productModel.find(filter).limit(limit).sort(sortBy).skip(page * limit);
         } catch (err) {
             throw new Error(err);
         }

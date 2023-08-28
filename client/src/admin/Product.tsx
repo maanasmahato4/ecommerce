@@ -9,6 +9,7 @@ import ProductCard from "../components/ProductCard";
 import { IGetProduct } from "../types/product.types";
 import { useCategoryApi } from "../api/category.api";
 import { CategoryContext } from "../context/category.context";
+import SearchProduct from "../components/SearchProduct";
 
 function Product() {
   const {setCategories} = useContext(CategoryContext);
@@ -16,7 +17,8 @@ function Product() {
   const [opened, { open, close }] = useDisclosure(false);
   const { addProduct, getProducts } = useProductApi();
   const { getCategories } = useCategoryApi();
-  const [category, setCategory] = useState<string | undefined>(undefined);
+  const [category, setCategory] = useState<string | undefined>("all");
+  const [search, setSearch] = useState<string>("");
 
   const queryClient = useQueryClient();
 
@@ -29,8 +31,8 @@ function Product() {
   }) */
 
   const productQuery = useQuery({
-    queryKey: ["products", category],
-    queryFn: async () => await getProducts(category)
+    queryKey: ["products", category, search],
+    queryFn: async () => await getProducts(category, search)
   });
 
   const categoryQuery = useQuery({
@@ -87,9 +89,11 @@ function Product() {
   return (
     <section style={{ position: "relative", minHeight: "100vh" }}>
       <Flex direction="row" justify="space-between" wrap="wrap" mx="auto">
-        <div></div>
-        <Select label="Role" style={{width: "20%"}} defaultValue={category}  data={[
-        {value: undefined, label: "all", key: 0},
+        <div style={{width: "80%"}}>
+          <SearchProduct setSearch={(value: string) => setSearch(value)}/>
+        </div>
+        <Select label="Category" style={{width: "20%"}} defaultValue={category}  data={[
+        {value: "all", label: "all", key: 0},
         ...CategorySelect
       ]} onChange={(value: any) => setCategory(value)} />
       </Flex>

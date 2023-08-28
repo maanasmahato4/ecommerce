@@ -15,7 +15,7 @@ export const useUsersApi = () => {
     })
 
     async function getUsers(role: string | undefined): Promise<Array<IGetUsers>> {
-        const url = role != undefined ? `?role=${role}` : `/`;
+        const url = `?role=${role}`;
         const { data } = await userApi.get(url);
         return data;
     }

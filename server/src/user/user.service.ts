@@ -13,9 +13,9 @@ export class UserService {
     ) { }
 
     async getUsers(req: Request) {
-        let filter = {};
-        if (req.query.role) {
-            filter = { roles: req.query.role }
+        let filter: any = {};
+        if (!(req.query.role == "all")) {
+            filter.roles = req.query.role || "all";
         }
         return await this.userModel.find(filter);
     }

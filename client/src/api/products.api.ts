@@ -27,9 +27,9 @@ export const useProductApi = () => {
         }
     }
 
-    const getProducts = async (category: (string | undefined)): Promise<AxiosResponse<any, any>> => {
+    const getProducts = async (category: (string | undefined), search: (string | any)): Promise<AxiosResponse<any, any>> => {
         try {
-            const url = category != undefined ? `?category=${category}` : '/'
+            const url = `?search=${search}&category=${category}&limit=${10}`
             const { data } = await productApi.get(url);
             return data;
         } catch (error: any) {

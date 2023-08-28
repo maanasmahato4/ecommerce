@@ -1,10 +1,14 @@
 import { useContext } from "react";
 import { ProductContext } from "../context/product.context";
-import { Card, Image, Group, Badge, Text } from "@mantine/core";
+import { Card, Image, Group, Badge, Text, Button } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 
 function AboutProduct() {
-  const { product } = useContext(ProductContext);
+  const { product, setCartItem, cartItems } = useContext(ProductContext);
+    // If product is not available yet, render a verbiage or a loading indicator
+    if (!product) {
+      return <div>Loading product details...</div>;
+    }
   const { brandName, category, discount, imageUrls, inStock, price, productDescription, productName } = product;
   return (
     <Card shadow="md" padding="md" style={{padding: "2rem"}}>
@@ -33,6 +37,7 @@ function AboutProduct() {
             <h3>InStock: {inStock}</h3>
           </Group>
         </Card.Section>
+        <Button onClick={() => {setCartItem([...cartItems, {...product}]);}}>Add to cart</Button>
     </Card>
   )
 }
