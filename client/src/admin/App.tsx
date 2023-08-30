@@ -21,7 +21,8 @@ function AdminApp() {
       asideOffsetBreakpoint="sm"
       navbar={
         <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }}>
-          <Link to="/admin/" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Products</Link>
+          <Link to="/admin/" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Statistics</Link>
+          <Link to="/admin/products" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Products</Link>
           <Link to="/admin/categories" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Category</Link>
           <Link to="/admin/users" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Users</Link>
           <Link to="/admin/orders" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Orders</Link>

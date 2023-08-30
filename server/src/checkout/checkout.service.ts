@@ -3,12 +3,26 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CheckOutDto } from 'src/common/dto/checkout.dto';
 import { CheckOut, CheckOutDocument, } from 'src/common/schema/checkOut.schema';
+import {Request} from "express";
 
 @Injectable()
 export class CheckoutService {
     constructor(
         @InjectModel(CheckOut.name) private checkOutModel: Model<CheckOutDocument>
     ) { }
+
+    async getOrderCount(req: Request) {
+        let filter: any = {};
+        if(req.query.status != ""){
+            filter.status = req.query.status;
+        }
+        try {
+            return await this.checkOutModel.countDocuments(filter);
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
     async getAllOrders() {
         try {
             return await this.checkOutModel.find();

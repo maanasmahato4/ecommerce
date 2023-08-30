@@ -4,7 +4,7 @@ import { HydratedDocument } from "mongoose";
 
 export type categoryDocument = HydratedDocument<Category>
 
-@Schema()
+@Schema({timestamps: true})
 export class Category {
     @Prop({type: String, required: true})
     category: string

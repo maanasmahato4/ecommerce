@@ -4,7 +4,7 @@ import { User } from "./user.schema";
 
 export type CheckOutDocument = HydratedDocument<CheckOut>
 
-@Schema()
+@Schema({timestamps: true})
 
 export class CheckOut {
     @Prop({ type: mongoose.Types.ObjectId, ref: 'user', required: true })

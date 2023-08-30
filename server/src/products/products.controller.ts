@@ -15,6 +15,13 @@ export class ProductsController {
         private productsService: ProductsService
     ) { }
 
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Employee, Role.Admin)
+    @Get("/count")
+    async getProductsCount(@Req() req: Request) {
+        return await this.productsService.GetProductsCount(req);
+    }
+
     @UseGuards(JwtAuthGuard)
     @Get("/:id")
     async getProduct(@Param("id") id: string) {
@@ -26,6 +33,7 @@ export class ProductsController {
     async getProducts(@Req() req: Request) {
         return await this.productsService.GetProducts(req);
     }
+
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.Employee, Role.Admin)

@@ -69,7 +69,7 @@ function OrderCard({ item, totalPrice, open, setStatus, setItem }: any) {
             {
                 decodedToken.roles !== 'admin' && decodedToken.roles !== 'employee'
                     ?
-                    <Button style={{ marginBlock: "1rem" }} variant="outline" color="red" disabled={item.status == "delivered" ? true : false} onClick={() => { handleStatusMutation.mutate(item) }}>Cancel order</Button>
+                    <Button style={{ marginBlock: "1rem" }} variant="outline" color="red" disabled={item.status == "delivered" || item.status == "cancelled" ? true : false} onClick={() => { handleStatusMutation.mutate(item) }}>{item.status === "cancelled" ? "Order has been cancelled" : "Cancel Order"}</Button>
                     :
                     <Button.Group>
                         <ActionIcon variant="outline" color="cyan" style={{ marginBlock: "1rem", marginRight: "1rem" }} onClick={() => { setItem(item); setStatus(item.status); open(); }}><IconEdit size="1.5rem" color="blue" /></ActionIcon>

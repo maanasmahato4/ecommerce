@@ -7,18 +7,18 @@ import { useNavigate } from "react-router-dom";
 function Cart() {
   const navigate = useNavigate();
   const { cartItems, setCartItem } = useContext(ProductContext);
-  const {setCheckOutList} = useContext(CheckOutContext);
+  const { setCheckOutList } = useContext(CheckOutContext);
   const [totalPrice, setTotalPrice] = useState<number>(0);
-  const [cartItemsWithQuantity, setCartItemsWithQuantity] = useState<{product: any, quantity: number}[]>([]);
+  const [cartItemsWithQuantity, setCartItemsWithQuantity] = useState<{ product: any, quantity: number }[]>([]);
 
   useEffect(() => {
-    const newCart = cartItems.reduce((acc: {product: any, quantity: number}[], currItem) => {
+    const newCart = cartItems.reduce((acc: { product: any, quantity: number }[], currItem) => {
       const foundItem = acc.find((item) => item.product._id === currItem._id);
 
       if (foundItem) {
         foundItem.quantity += 1;
       } else {
-        acc.push({product: currItem, quantity: 1});
+        acc.push({ product: currItem, quantity: 1 });
       }
 
       return acc;
@@ -28,7 +28,7 @@ function Cart() {
     setTotalPrice(newCart.reduce((total, item) => total + item.product.price * item.quantity, 0));
   }, [cartItems]);
 
-  
+
 
   if (cartItems.length == 0) {
     return <Card style={{ marginBlock: "1rem" }}>
@@ -47,8 +47,8 @@ function Cart() {
       <div>
         <h3>Total: ${totalPrice}</h3>
         <Button.Group>
-        <Button onClick={() => {setCheckOutList(cartItemsWithQuantity); navigate("/checkout")}}>Check Out</Button>
-        <Button color="red" onClick={() => setCartItem([])}>Clear</Button>
+          <Button onClick={() => { setCheckOutList(cartItemsWithQuantity); setCartItem([]); navigate("/checkout") }}>Check Out</Button>
+          <Button color="red" onClick={() => setCartItem([])}>Clear</Button>
         </Button.Group>
       </div>
     </div>

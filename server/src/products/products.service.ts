@@ -18,6 +18,14 @@ export class ProductsService {
         }
     }
 
+    async GetProductsCount(req: Request) {
+        try {
+            return await this.productModel.countDocuments();
+        } catch (err) {
+            throw new Error(err);
+        }
+    }
+
     async GetProducts(req: Request): Promise<Array<Product>> {
         // page
         let page: number = 0;

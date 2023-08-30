@@ -17,6 +17,7 @@ import Orders from "./pages/Orders";
 import Cart from "./components/Cart";
 import { CheckOutProvider } from "./context/checkout.context";
 import ManageOrders from "./admin/Orders";
+import Stats from "./admin/Stats";
 
 function App() {
   return (
@@ -33,7 +34,8 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
 
         <Route path="/admin/*" element={<AdminApp />}>
-          <Route path="" element={
+          <Route path="" element={<Stats/>}/>
+          <Route path="products" element={
             <ProductProvider>
               <CategoryProvider>
                 <Product />

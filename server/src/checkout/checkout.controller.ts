@@ -1,8 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { CheckoutService } from './checkout.service';
 import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { CheckOutDto } from 'src/common/dto/checkout.dto';
+import {Request} from "express";
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { Role } from 'src/common/enum/roles.enum';
 
 @ApiTags("Orders")
 @Controller('checkout')
@@ -10,6 +14,13 @@ export class CheckoutController {
     constructor(
         private checkOutService: CheckoutService
     ){}
+
+    /* @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.Employee, Role.Admin) */
+    @Get("/count")
+    async getOrderCount(@Req() req: Request){
+        return await this.checkOutService.getOrderCount(req);
+    }
 
     @UseGuards(JwtAuthGuard)
     @Get("/")
