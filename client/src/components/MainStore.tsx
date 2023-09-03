@@ -9,6 +9,7 @@ import SearchProduct from "../components/SearchProduct";
 import { Carousel } from "@mantine/carousel";
 import { useNavigate } from "react-router-dom";
 import { ProductContext } from "../context/product.context";
+import { SuccessNotification } from "./Notification";
 
 function MainStore() {
   const { setCategories } = useContext(CategoryContext);
@@ -93,7 +94,7 @@ function MainStore() {
                   </div>
                 </Group>
                 <Text style={{ marginBlock: "10px" }}>{productDescription.slice(0, 100)}...<span style={{ color: "purple", cursor: "pointer", textDecoration: "underline" }} onClick={() => { setProduct({ ...product }); navigate(`/about/${_id}`) }}>see more</span></Text>
-                <Button onClick={() => setCartItem([...cartItems, { ...product }])}>Add to cart</Button>
+                <Button onClick={() => {setCartItem([...cartItems, { ...product }]); SuccessNotification("Item added to cart!", "")}}>Add to cart</Button>
               </Card.Section>
             </Card>
           )

@@ -10,9 +10,11 @@ import { IGetProduct } from "../types/product.types";
 import { useCategoryApi } from "../api/category.api";
 import { CategoryContext } from "../context/category.context";
 import SearchProduct from "../components/SearchProduct";
+import { LoadingScreen } from "../components/LoadingScreen";
+import { SuccessNotification } from "../components/Notification";
 
 function Product() {
-  const {setCategories} = useContext(CategoryContext);
+  const { setCategories } = useContext(CategoryContext);
 
   const [opened, { open, close }] = useDisclosure(false);
   const { addProduct, getProducts } = useProductApi();
@@ -39,10 +41,10 @@ function Product() {
     queryKey: ["category"],
     queryFn: async () => await getCategories()
   });
-  
+
   useEffect(() => {
-    if(categoryQuery.data){
-        setCategories(categoryQuery.data);
+    if (categoryQuery.data) {
+      setCategories(categoryQuery.data);
     }
   }, [categoryQuery.data]);
 
@@ -64,6 +66,7 @@ function Product() {
     async (product: any): Promise<void> => {
       await addProduct(product);
       form.reset();
+      SuccessNotification(`New product added!`, "");
     },
     {
       onSuccess: () => {
@@ -73,7 +76,7 @@ function Product() {
   );
 
   if (productQuery.isLoading || categoryQuery.isLoading) {
-    return <h1>loading...</h1>
+    return <LoadingScreen />
   }
 
   if (productQuery.isError || categoryQuery.isError) {
@@ -83,21 +86,21 @@ function Product() {
   const CategorySelect = categoryQuery.data.map((item: { _id: string, category: string }, idx: number) => {
     return { value: item.category, label: item.category, key: idx + 1 };
   });
- 
+
 
 
   return (
     <section style={{ position: "relative", minHeight: "100vh" }}>
       <Flex direction="row" justify="space-between" wrap="wrap" mx="auto">
-        <div style={{width: "80%"}}>
-          <SearchProduct setSearch={(value: string) => setSearch(value)}/>
+        <div style={{ width: "80%" }}>
+          <SearchProduct setSearch={(value: string) => setSearch(value)} />
         </div>
-        <Select label="Category" style={{width: "20%"}} defaultValue={category}  data={[
-        {value: "all", label: "all", key: 0},
-        ...CategorySelect
-      ]} onChange={(value: any) => setCategory(value)} />
+        <Select label="Category" style={{ width: "20%" }} defaultValue={category} data={[
+          { value: "all", label: "all", key: 0 },
+          ...CategorySelect
+        ]} onChange={(value: any) => setCategory(value)} />
       </Flex>
-      
+
       <Flex direction="row" justify="center" wrap="wrap" mx="auto">
         {productQuery.data.map((product: IGetProduct, idx: number) => {
           return <ProductCard key={idx} {...product} />

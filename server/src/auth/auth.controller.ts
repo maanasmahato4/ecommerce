@@ -1,8 +1,8 @@
 import { Controller, Body, Post, Res, BadRequestException, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
-import { SignInDto, SignUpDto } from 'src/common/dto/auth.dto';
-import { LocalAuthGuard } from 'src/common/guards/local.guard';
+import { SignInDto, SignUpDto } from 'src/auth/auth.dto';
+import { LocalAuthGuard } from 'src/auth/guards/local.guard';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags("Authentication")

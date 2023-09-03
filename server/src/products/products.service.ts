@@ -1,9 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Response, Request } from "express";
 import { Model } from 'mongoose';
-import { ProductDto } from 'src/common/dto/product.dto';
-import { Product, ProductDocument } from 'src/common/schema/product.schema';
+import { ProductDto } from 'src/products/product.dto';
+import { Product, ProductDocument } from 'src/products/product.schema';
 
 @Injectable()
 export class ProductsService {
@@ -14,7 +14,7 @@ export class ProductsService {
         try {
             return await this.productModel.findById(id);
         } catch (err) {
-            throw new Error(err);
+            throw new NotFoundException(err);
         }
     }
 
@@ -22,7 +22,7 @@ export class ProductsService {
         try {
             return await this.productModel.countDocuments();
         } catch (err) {
-            throw new Error(err);
+            throw new NotFoundException(err);
         }
     }
 
@@ -74,7 +74,7 @@ export class ProductsService {
         try {
             return await this.productModel.find(filter).limit(limit).sort(sortBy).skip(page * limit);
         } catch (err) {
-            throw new Error(err);
+            throw new NotFoundException(err);
         }
     }
 
@@ -83,7 +83,7 @@ export class ProductsService {
             const newProduct = new this.productModel({ ...productData });
             return await newProduct.save();
         } catch (err) {
-            throw new Error(err);
+            throw new BadRequestException(err);
         }
     }
 
@@ -91,7 +91,7 @@ export class ProductsService {
     async UpdateProduct(uProductData: ProductDto, id: string): Promise<Product> {
         try {
             if (!(await this.productModel.findById(id))) {
-                throw new BadRequestException();
+                throw new NotFoundException(`item with id: ${id} not found`);
             }
             const UpdateProductData = {
                 ...uProductData
@@ -101,20 +101,20 @@ export class ProductsService {
             });
             return await updatedProduct;
         } catch (err) {
-            throw new Error(err);
+            throw new BadRequestException(err);
         }
     }
 
     async DeleteProduct(id: string, res: Response) {
         try {
             if (!(await this.productModel.findById(id))) {
-                throw new BadRequestException();
+                throw new NotFoundException(`item with id:${id} not found`);
             }
 
             await this.productModel.findByIdAndDelete(id);
             res.status(200).json({ message: "deleted" })
         } catch (err) {
-            throw new Error(err);
+            throw new BadRequestException(err);
         }
     }
 }

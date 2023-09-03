@@ -2,7 +2,7 @@ import { useStatsApi } from "../api/statistics.api";
 import { Card } from "@mantine/core";
 import { useState, useEffect } from "react";
 import { useOrderApi } from "../api/order.api";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Label } from 'recharts';
 
 function Stats() {
   const [productCount, setproductCount] = useState<number>(0);

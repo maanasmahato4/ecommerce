@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from 'mongoose';
-import { UpdateUserDto, UserDto } from 'src/common/dto/user.dto';
-import { User, UserDocument } from 'src/common/schema/user.schema';
+import { UpdateUserDto, UserDto } from 'src/user/user.dto';
+import { User, UserDocument } from 'src/user/user.schema';
 import { Request } from "express";
 
 @Injectable()
@@ -17,26 +17,58 @@ export class UserService {
         if (!(req.query.role == "all")) {
             filter.roles = req.query.role || "all";
         }
-        return await this.userModel.find(filter);
+        try {
+            return await this.userModel.find(filter);
+        } catch (error) {
+            throw new NotFoundException(error);
+        }
+
     }
 
     async createUser(UserData: UserDto) {
-        const createdUser = new this.userModel(UserData);
-        return await createdUser.save()
+        try {
+            const createdUser = new this.userModel(UserData);
+            return await createdUser.save()
+        } catch (error) {
+            throw new BadRequestException(error);
+        }
+
     }
 
     async updateUser(id: string, UserData: UpdateUserDto) {
-        const updatedUser = await this.userModel.findByIdAndUpdate(id, UserData);
-        return updatedUser;
+        try {
+            const userExist = await this.userModel.findById(id);
+            if (!userExist) {
+                throw new NotFoundException(`user with Id:${id} not found!`);
+            }
+            const updatedUser = await this.userModel.findByIdAndUpdate(id, UserData);
+            return updatedUser;
+        } catch (error) {
+            throw new BadRequestException(error);
+        }
     }
 
     async deleteUser(id: string) {
-        const deletedUser = await this.userModel.findByIdAndDelete(id);
-        return deletedUser;
+        try {
+            const userExist = await this.userModel.findById(id);
+            if (!userExist) {
+                throw new NotFoundException(`user with Id:${id} not found!`);
+            }
+            const deletedUser = await this.userModel.findByIdAndDelete(id);
+            return deletedUser;
+        } catch (error) {
+            throw new BadRequestException(error);
+        }
+
     }
 
     async findByEmail(userEmail: string) {
-        const user = await this.userModel.findOne({ email: userEmail });
-        return user;
+        try {
+            const user = await this.userModel.findOne({ email: userEmail });
+            return user;
+        } catch (error) {
+            throw new BadRequestException(error);
+        }
+
     }
 }

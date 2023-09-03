@@ -979,12 +979,12 @@
   resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-6.0.18.tgz#720c6102b09d8c187d629c5e5bc7d9fe267d169e"
   integrity sha512-i9RxEtC+7t5qG5Gn5SqTHkHxH9MSsGi9mQebt/GitX9+d9BVBwYLqutlDlHvb8bvDteuYphX5VWLSnJXT4Pivw==
 
-"@mantine/notifications@^6.0.17":
-  version "6.0.18"
-  resolved "https://registry.yarnpkg.com/@mantine/notifications/-/notifications-6.0.18.tgz#474358ab2609bbbcdf6c50b940526fa84b0af670"
-  integrity sha512-1ZT0QmGYnXFP0UysI8aDbaaj+xp2wBDCaVYrFHax8CpQuL/Pc7LYjhyp1kmFeda+eHCg6MMbmKCzAaKElQEqJg==
+"@mantine/notifications@^6.0.19":
+  version "6.0.19"
+  resolved "https://registry.yarnpkg.com/@mantine/notifications/-/notifications-6.0.19.tgz#1aaf82fd4ac5b32faca8baf17475199d3d6ff58e"
+  integrity sha512-Cr2y8g2nM8bUAP+JYcKdT+a3d+1awUd40EMrDMwb+yUXUSt1amZerYQ7qRuezqvBgiViy/HGnM4WfeF3sfWJRQ==
   dependencies:
-    "@mantine/utils" "6.0.18"
+    "@mantine/utils" "6.0.19"
     react-transition-group "4.4.2"
 
 "@mantine/styles@6.0.18":

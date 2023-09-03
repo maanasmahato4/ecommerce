@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useContext } from "react";
 import { ProductContext } from "../context/product.context";
 import { CategoryContext } from "../context/category.context";
+import { SuccessNotification } from "./Notification";
 
 function UpdateProduct() {
   const queryClient = useQueryClient();
@@ -27,7 +28,8 @@ function UpdateProduct() {
       if (id == undefined) {
         throw new Error("id is missing")
       }
-      await updateProduct(id, {...uproduct, imageUrls: [...product.imageUrls]})
+      await updateProduct(id, {...uproduct, imageUrls: [...product.imageUrls]});
+      SuccessNotification("Product updated!", "green")
     },
     {
       onSuccess: () => {

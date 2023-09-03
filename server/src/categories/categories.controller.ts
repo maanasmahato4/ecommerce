@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Delete, Res, Body, Param, UseGuards } from '@nestjs/common';
 import { Response } from "express";
 import { CategoriesService } from './categories.service';
-import { CategoryDto } from 'src/common/dto/category.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { Role } from 'src/common/enum/roles.enum';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { CategoryDto } from 'src/categories/category.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Role } from 'src/auth/enum/roles.enum';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags("categories")

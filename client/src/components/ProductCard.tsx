@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useProductApi } from "../api/products.api";
 import { useNavigate } from "react-router-dom";
 import { ProductContext } from "../context/product.context";
+import { SuccessNotification } from "./Notification";
 
 function ProductCard(product: IGetProduct) {
   const { decodedToken } = useContext(AuthContext);
@@ -20,6 +21,7 @@ function ProductCard(product: IGetProduct) {
   const handleDeleteMutation = useMutation(
     async (id: string): Promise<void> => {
       await deleteProduct(id);
+      SuccessNotification("Order deleted!", "")
     },
     {
       onSuccess: () => {

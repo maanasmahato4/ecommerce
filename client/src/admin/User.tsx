@@ -6,6 +6,7 @@ import { IGetUsers } from "../types/auth.types";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
+import { SuccessNotification } from "../components/Notification";
 
 function User() {
   const { getUsers, updateUser, deleteUser } = useUsersApi();
@@ -41,6 +42,7 @@ function User() {
 
   const handleUpdateMutation = useMutation(async (data: any): Promise<void> => {
     await updateUser(data._id, { username: data.username, email: data.email, roles: data.roles })
+    SuccessNotification("User role updated!", "");
   }, {
     onSuccess: () => {
       queryClient.invalidateQueries(["users"]);
@@ -51,6 +53,7 @@ function User() {
 
   const handleDeleteMutation = useMutation(async (id: string) => {
     await deleteUser(id);
+    SuccessNotification("User deleted!", "red");
   },
     {
       onSuccess: () => {

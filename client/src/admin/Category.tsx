@@ -4,6 +4,8 @@ import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { useCategoryApi } from "../api/category.api";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { notifications } from "@mantine/notifications";
+import { SuccessNotification } from "../components/Notification";
 
 function Category() {
   const queryClient = useQueryClient();
@@ -32,14 +34,14 @@ function Category() {
     }
   );
 
-  const handleDeleteMutation = useMutation( async (id: string): Promise<void> => {
+  const handleDeleteMutation = useMutation(async (id: string): Promise<void> => {
     await deleteCategories(id)
   },
-  {
-    onSuccess: () => {
-      queryClient.invalidateQueries(["category"]);
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["category"]);
+      }
     }
-  }
   )
 
 
@@ -56,11 +58,14 @@ function Category() {
     <section style={{ position: "relative", minHeight: "100vh" }}>
       <Flex direction="row" justify="center" wrap="wrap" mx="auto">
         {data.map((item: any, idx: number) => {
-          return <Card key={idx} shadow="lg" style={{width: "250px", margin: "0.5rem"}}>
+          return <Card key={idx} shadow="lg" style={{ width: "250px", margin: "0.5rem" }}>
             <h1>{item.category}</h1>
             <Button.Group>
-                <ActionIcon variant="outline" color="red" style={{ marginInline: "0.5rem" }} onClick={() => handleDeleteMutation.mutate(item._id)}><IconTrash size="1.5rem" color="red" /></ActionIcon>
-              </Button.Group>
+              <ActionIcon variant="outline" color="red" style={{ marginInline: "0.5rem" }} onClick={() => {
+                handleDeleteMutation.mutate(item._id);
+                SuccessNotification("Category deleted!", "red");
+              }}><IconTrash size="1.5rem" color="red" /></ActionIcon>
+            </Button.Group>
           </Card>
         })}
       </Flex>
@@ -71,7 +76,10 @@ function Category() {
         </ActionIcon>
       </div>
       <Modal opened={opened} onClose={close} title="New Category">
-        <form onSubmit={form.onSubmit(values => { handleSubmit.mutate(values); })}>
+        <form onSubmit={form.onSubmit(values => {
+          handleSubmit.mutate(values);
+          SuccessNotification(`Category: ${values.category} has been created!`, "")
+        })}>
           <TextInput label="Category" required withAsterisk {...form.getInputProps("category", { type: "input" })} />
           <Button.Group style={{ marginBlock: "0.7rem" }}>
             <Button type="submit">Submit</Button>

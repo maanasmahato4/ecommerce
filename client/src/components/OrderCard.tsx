@@ -5,6 +5,7 @@ import { useOrderApi } from "../api/order.api";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
 import { IconTrash, IconEdit } from "@tabler/icons-react";
+import { SuccessNotification } from "./Notification";
 
 function OrderCard({ item, totalPrice, open, setStatus, setItem }: any) {
     const { decodedToken } = useContext(AuthContext);
@@ -14,13 +15,15 @@ function OrderCard({ item, totalPrice, open, setStatus, setItem }: any) {
     const handleStatusMutation = useMutation(async (values: any) => {
         let id = values._id;
         let item = { ...values, status: "cancelled" };
-        await updateOrder(id, item)
+        await updateOrder(id, item);
+        SuccessNotification("Status updated!", "");
     }, {
         onSuccess: () => queryClient.invalidateQueries(['orders'])
     });
 
     const handleDeleteMutation = useMutation(async (id: string) => {
         await deleteOrder(id);
+        SuccessNotification("Order deleted!", "red");
     }, {
         onSuccess: () => queryClient.invalidateQueries(['orders'])
     });

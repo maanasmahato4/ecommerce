@@ -1,9 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Response } from "express";
 import { Model } from 'mongoose';
-import { CategoryDto } from 'src/common/dto/category.dto';
-import { Category, categoryDocument } from 'src/common/schema/category.schema';
+import { CategoryDto } from 'src/categories/category.dto';
+import { Category, categoryDocument } from 'src/categories/category.schema';
 
 @Injectable()
 export class CategoriesService {
@@ -14,7 +14,7 @@ export class CategoriesService {
         try {
             return await this.categoryModel.find();
         } catch (error) {
-            throw new Error(error);
+            throw new NotFoundException(error);
         }
     }
 
@@ -23,7 +23,7 @@ export class CategoriesService {
             const savedCategory = new this.categoryModel({...categoryData});
             return await savedCategory.save();
         } catch (error) {
-            throw new Error(error);
+            throw new BadRequestException(error);
         }
     }
 
@@ -35,7 +35,7 @@ export class CategoriesService {
             await this.categoryModel.findByIdAndDelete(id);
             res.status(200).json({ message: "success" });
         } catch (error) {
-            throw new Error(error);
+            throw new BadRequestException(error);
         }
     }
 }

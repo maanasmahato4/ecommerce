@@ -5,6 +5,7 @@ import { useForm } from "@mantine/form";
 import { ICartProduct } from "../types/product.types";
 import { AuthContext } from "../context/auth.context";
 import { useOrderApi } from "../api/order.api";
+import { SuccessNotification } from "../components/Notification";
 
 interface FormData {
   name: string;
@@ -45,6 +46,7 @@ function CheckOut() {
   const handleSubmit = async (values: FormData) => {
     const finalData = {userId: decodedToken.id, ...values}
     await addOrder(finalData);
+    SuccessNotification("New order placed!", "")
     form.reset();
   };
   return (

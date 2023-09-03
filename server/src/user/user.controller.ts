@@ -1,12 +1,12 @@
 import { Controller, Post, Body, Get, Req, Query, UseGuards, Put, Delete, Param } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UpdateUserDto, UserDto } from 'src/common/dto/user.dto';
+import { UpdateUserDto, UserDto } from 'src/user/user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Request } from "express";
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { Role } from 'src/common/enum/roles.enum';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/enum/roles.enum';
 
 
 @ApiTags("User")

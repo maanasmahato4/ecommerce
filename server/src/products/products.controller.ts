@@ -1,11 +1,11 @@
 import { Controller, Post, Get, Put, Delete, Param, Res, Req, Body, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Response, Request, Express } from "express";
-import { ProductDto } from 'src/common/dto/product.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { Role } from 'src/common/enum/roles.enum';
+import { ProductDto } from 'src/products/product.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/enum/roles.enum';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags("Product")

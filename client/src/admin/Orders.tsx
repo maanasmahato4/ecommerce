@@ -5,6 +5,7 @@ import { AuthContext } from "../context/auth.context";
 import OrderCard from "../components/OrderCard";
 import { Modal, Radio, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { SuccessNotification } from "../components/Notification";
 
 function ManageOrders() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -22,6 +23,7 @@ function ManageOrders() {
     const id = values._id;
     let item = {...values, status: selectedItemStatus};
     await updateOrder(id, item);
+    SuccessNotification("Status updated!", "");
   }, {
     onSuccess: () => {
       queryClient.invalidateQueries(["orders"]);
