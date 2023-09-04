@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import Home from "./pages/Home";
@@ -18,8 +18,14 @@ import Cart from "./components/Cart";
 import { CheckOutProvider } from "./context/checkout.context";
 import ManageOrders from "./admin/Orders";
 import Stats from "./admin/Stats";
+import { useContext } from "react";
+import { AuthContext } from "./context/auth.context";
 
 function App() {
+  const { decodedToken } = useContext(AuthContext);
+  function ProtectedRoute({ children }: any) {
+    return (decodedToken.roles === "admin" || decodedToken.roles === "employee") ? children : (<Navigate to="/" />)
+  }
   return (
     <Fragment>
       <Routes>
@@ -27,14 +33,14 @@ function App() {
           <Route path="" element={<MainStore />} />
           <Route path="orders" element={<Orders />} />
           <Route path="cart" element={<CheckOutProvider><Cart /></CheckOutProvider>} />
-          <Route path="checkout" element={<CheckOutProvider><CheckOut/></CheckOutProvider>} />
+          <Route path="checkout" element={<CheckOutProvider><CheckOut /></CheckOutProvider>} />
           <Route path="about/:id" element={<AboutProduct />} />
         </Route>
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
 
-        <Route path="/admin/*" element={<AdminApp />}>
-          <Route path="" element={<Stats/>}/>
+        <Route path="/admin/*" element={<ProtectedRoute><AdminApp /></ProtectedRoute>}>
+          <Route path="" element={<Stats />} />
           <Route path="products" element={
             <ProductProvider>
               <CategoryProvider>
@@ -57,8 +63,8 @@ function App() {
           <Route path="categories" element={
             <Category />
           } />
-          <Route path="users" element={<User />} />
-          <Route path="orders" element={<ManageOrders/>}/>
+          <Route path="users" element={<ProtectedRoute><User /></ProtectedRoute>} />
+          <Route path="orders" element={<ManageOrders />} />
         </Route>
       </Routes>
     </Fragment>

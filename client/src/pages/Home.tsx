@@ -24,6 +24,7 @@ import { ProductProvider } from '../context/product.context';
 
 function Home() {
   const navigate = useNavigate();
+  const {decodedToken} = useContext(AuthContext);
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const { token } = useContext(AuthContext);
@@ -53,9 +54,11 @@ function Home() {
         }
         footer={
           <Footer height={60} p="md">
-            Application footer
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <p>&copy; {new Date().getFullYear()} Maanas Store. All Rights Reserved.</p>
+            </div>
           </Footer>
-        }
+        }        
         header={
           <Header height={{ base: 50, md: 70 }} p="md">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
@@ -73,7 +76,7 @@ function Home() {
                 <Text>Maanas Store</Text>
               </div>
               <Flex direction="row">
-                <Link to="/admin" style={{ textDecoration: "none", color: "black", marginInline: "1rem" }}>Dashboard</Link>
+                {(decodedToken.roles === "admin" || decodedToken.roles === "employee") ? <Link to="/admin" style={{ textDecoration: "none", color: "black", marginInline: "1rem" }}>Dashboard</Link> : <></> }
                 <Link to="/cart" style={{ textDecoration: "none", marginInline: "1rem" }}>
                   <Group position='center'>
                     <Indicator color='red' disabled>

@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { AppShell, Footer, Header, MediaQuery, Burger, Text, useMantineTheme, Navbar } from "@mantine/core";
+import { AuthContext } from "../context/auth.context";
 
 function AdminApp() {
+  const {decodedToken} = useContext(AuthContext);
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   return (
@@ -24,7 +26,7 @@ function AdminApp() {
           <Link to="/admin/" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Statistics</Link>
           <Link to="/admin/products" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Products</Link>
           <Link to="/admin/categories" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Category</Link>
-          <Link to="/admin/users" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Users</Link>
+          {decodedToken.roles === "admin" ?  <Link to="/admin/users" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Users</Link> : <></>}
           <Link to="/admin/orders" style={{ textDecoration: "none", color: "black", marginBlock: "0.5rem" }}>Orders</Link>
         </Navbar>
       }

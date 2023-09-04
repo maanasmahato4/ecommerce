@@ -1,5 +1,5 @@
 import { Fragment, useContext, useEffect } from "react";
-import { TextInput, Button } from "@mantine/core";
+import { TextInput, Button,Flex } from "@mantine/core";
 import "../styles/form.css";
 import { useForm } from "@mantine/form";
 import { useAuthApi } from "../api/auth.api";
@@ -66,10 +66,13 @@ function SignUp() {
         <TextInput className="x-input" label="Password" type="password" withAsterisk required {...form.getInputProps('password', { type: "input" })} />
         <TextInput className="x-input" label="Confirm Password" type="password" withAsterisk required {...form.getInputProps('confirm_password', { type: "input" })}
         />
-        <Button.Group className="x-input">
-          <Button type="submit">Submit</Button>
-          <Button type="reset" color="red">Clear</Button>
-        </Button.Group>
+        <Flex direction="row" justify="space-between">
+          <Button.Group className="x-input">
+            <Button type="submit">Submit</Button>
+            <Button type="reset" color="red">Clear</Button>
+          </Button.Group>
+          <Button className="x-input" onClick={() => navigate("/signin")}>Already have an account?</Button>
+        </Flex>
       </form>
     </Fragment>
   )

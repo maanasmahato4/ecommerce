@@ -109,10 +109,9 @@ function User() {
         <form onSubmit={form.onSubmit(values => { handleUpdateMutation.mutate(values); })}>
           <TextInput label="Username" required withAsterisk disabled {...form.getInputProps("username", { type: "input" })} />
           <TextInput label="Email" required withAsterisk disabled {...form.getInputProps("email", { type: "input" })} />
-          <Select label="Role" required withAsterisk data={[
+          <Select label="Role" required withAsterisk disabled={selectedUser.roles === "admin"} data={[
             { value: "user", label: "user" },
-            { value: "employee", label: "employee" },
-            { value: "admin", label: "admin" },
+            { value: "employee", label: "employee" }
           ]} {...form.getInputProps("roles", { type: "input" })} />
           <Button.Group style={{ marginBlock: "0.7rem" }}>
             <Button type="submit">Submit</Button>
