@@ -12,7 +12,7 @@ export const useStatsApi = () => {
         }
     });
 
-    const getProductCount = async (): Promise<any> => {
+    const getProductCount = async (): Promise<number> => {
         try {
             const { data } = await statsApi.get(`/product/count`);
             return data;

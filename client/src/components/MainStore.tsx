@@ -10,6 +10,7 @@ import { Carousel } from "@mantine/carousel";
 import { useNavigate } from "react-router-dom";
 import { ProductContext } from "../context/product.context";
 import { SuccessNotification } from "./Notification";
+import PaginationComponent from "./Pagination";
 
 function MainStore() {
   const { setCategories } = useContext(CategoryContext);
@@ -21,11 +22,12 @@ function MainStore() {
   const { getCategories } = useCategoryApi();
   const [category, setCategory] = useState<string | undefined>("all");
   const [search, setSearch] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
 
 
   const productQuery = useQuery({
-    queryKey: ["products", category, search],
-    queryFn: async () => await getProducts(category, search)
+    queryKey: ["products", category, search, page],
+    queryFn: async () => await getProducts(category, search, page)
   });
 
   const categoryQuery = useQuery({
@@ -100,6 +102,9 @@ function MainStore() {
           )
         })}
       </Flex>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <PaginationComponent page={(value: number) => setPage(value)}/>
+      </div>
     </section>
   )
 }

@@ -12,6 +12,7 @@ import { CategoryContext } from "../context/category.context";
 import SearchProduct from "../components/SearchProduct";
 import { LoadingScreen } from "../components/LoadingScreen";
 import { SuccessNotification } from "../components/Notification";
+import PaginationComponent from "../components/Pagination";
 
 function Product() {
   const { setCategories } = useContext(CategoryContext);
@@ -21,6 +22,8 @@ function Product() {
   const { getCategories } = useCategoryApi();
   const [category, setCategory] = useState<string | undefined>("all");
   const [search, setSearch] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+
 
   const queryClient = useQueryClient();
 
@@ -33,8 +36,8 @@ function Product() {
   }) */
 
   const productQuery = useQuery({
-    queryKey: ["products", category, search],
-    queryFn: async () => await getProducts(category, search)
+    queryKey: ["products", category, search, page],
+    queryFn: async () => await getProducts(category, search, page)
   });
 
   const categoryQuery = useQuery({
@@ -48,6 +51,7 @@ function Product() {
     }
   }, [categoryQuery.data]);
 
+  
 
   const form = useForm({
     initialValues: {
@@ -106,6 +110,9 @@ function Product() {
           return <ProductCard key={idx} {...product} />
         })}
       </Flex>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+       <PaginationComponent page={(value: number) => setPage(value)}/>
+      </div>
       <div style={{ position: "fixed", bottom: "5rem", right: "10px" }}>
         <ActionIcon variant="filled" color="blue" size="2rem" onClick={open}>
           <IconPlus size="1rem" />
