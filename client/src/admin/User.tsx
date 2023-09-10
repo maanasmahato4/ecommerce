@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUsersApi } from "../api/users.api";
 import { useEffect, useState } from "react";
 import { Table, ActionIcon, Modal, TextInput, Button, Select, Flex } from "@mantine/core";
-import { IGetUsers } from "../types/auth.types";
+import { IGetUsers, IUser } from "../types/auth.types";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -40,7 +40,7 @@ function User() {
   }, [selectedUser])
 
 
-  const handleUpdateMutation = useMutation(async (data: any): Promise<void> => {
+  const handleUpdateMutation = useMutation(async (data: IUser): Promise<void> => {
     await updateUser(data._id, { username: data.username, email: data.email, roles: data.roles })
     SuccessNotification("User role updated!", "");
   }, {

@@ -20,6 +20,7 @@ import ManageOrders from "./admin/Orders";
 import Stats from "./admin/Stats";
 import { useContext } from "react";
 import { AuthContext } from "./context/auth.context";
+import { FilterProvider } from "./context/filter.context";
 
 function App() {
   const { decodedToken } = useContext(AuthContext);
@@ -28,45 +29,47 @@ function App() {
   }
   return (
     <Fragment>
-      <Routes>
-        <Route path="/*" element={<Home />}>
-          <Route path="" element={<MainStore />} />
-          <Route path="orders" element={<Orders />} />
-          <Route path="cart" element={<CheckOutProvider><Cart /></CheckOutProvider>} />
-          <Route path="checkout" element={<CheckOutProvider><CheckOut /></CheckOutProvider>} />
-          <Route path="about/:id" element={<AboutProduct />} />
-        </Route>
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signin" element={<SignIn />} />
+      <FilterProvider>
+        <Routes>
+          <Route path="/*" element={<Home />}>
+            <Route path="" element={<MainStore />} />
+            <Route path="orders" element={<Orders />} />
+            <Route path="cart" element={<CheckOutProvider><Cart /></CheckOutProvider>} />
+            <Route path="checkout" element={<CheckOutProvider><CheckOut /></CheckOutProvider>} />
+            <Route path="about/:id" element={<AboutProduct />} />
+          </Route>
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
 
-        <Route path="/admin/*" element={<ProtectedRoute><AdminApp /></ProtectedRoute>}>
-          <Route path="" element={<Stats />} />
-          <Route path="products" element={
-            <ProductProvider>
-              <CategoryProvider>
-                <Product />
-              </CategoryProvider>
-            </ProductProvider>
-          } />
-          <Route path=":id" element={
-            <ProductProvider>
-              <CategoryProvider>
-                <UpdateProduct />
-              </CategoryProvider>
-            </ProductProvider>
-          } />
-          <Route path="about/:id" element={
-            <ProductProvider>
-              <AboutProduct />
-            </ProductProvider>
-          } />
-          <Route path="categories" element={
-            <Category />
-          } />
-          <Route path="users" element={<ProtectedRoute><User /></ProtectedRoute>} />
-          <Route path="orders" element={<ManageOrders />} />
-        </Route>
-      </Routes>
+          <Route path="/admin/*" element={<ProtectedRoute><AdminApp /></ProtectedRoute>}>
+            <Route path="" element={<Stats />} />
+            <Route path="products" element={
+              <ProductProvider>
+                <CategoryProvider>
+                  <Product />
+                </CategoryProvider>
+              </ProductProvider>
+            } />
+            <Route path=":id" element={
+              <ProductProvider>
+                <CategoryProvider>
+                  <UpdateProduct />
+                </CategoryProvider>
+              </ProductProvider>
+            } />
+            <Route path="about/:id" element={
+              <ProductProvider>
+                <AboutProduct />
+              </ProductProvider>
+            } />
+            <Route path="categories" element={
+              <Category />
+            } />
+            <Route path="users" element={<ProtectedRoute><User /></ProtectedRoute>} />
+            <Route path="orders" element={<ManageOrders />} />
+          </Route>
+        </Routes>
+      </FilterProvider>
     </Fragment>
   )
 }

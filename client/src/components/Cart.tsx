@@ -3,16 +3,17 @@ import { ProductContext } from "../context/product.context";
 import { Card, Text, Button } from "@mantine/core";
 import { CheckOutContext } from "../context/checkout.context";
 import { useNavigate } from "react-router-dom";
+import { IGetProduct } from "../types/product.types";
 
 function Cart() {
   const navigate = useNavigate();
   const { cartItems, setCartItem } = useContext(ProductContext);
   const { setCheckOutList } = useContext(CheckOutContext);
   const [totalPrice, setTotalPrice] = useState<number>(0);
-  const [cartItemsWithQuantity, setCartItemsWithQuantity] = useState<{ product: any, quantity: number }[]>([]);
+  const [cartItemsWithQuantity, setCartItemsWithQuantity] = useState<{ product: IGetProduct, quantity: number }[]>([]);
 
   useEffect(() => {
-    const newCart = cartItems.reduce((acc: { product: any, quantity: number }[], currItem) => {
+    const newCart = cartItems.reduce((acc: { product: IGetProduct, quantity: number }[], currItem) => {
       const foundItem = acc.find((item) => item.product._id === currItem._id);
 
       if (foundItem) {

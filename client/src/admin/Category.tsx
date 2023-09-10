@@ -4,8 +4,9 @@ import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { useCategoryApi } from "../api/category.api";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { notifications } from "@mantine/notifications";
 import { SuccessNotification } from "../components/Notification";
+import { ICategory, ICategoryFormValues } from "../types/category.types";
+
 
 function Category() {
   const queryClient = useQueryClient();
@@ -17,14 +18,14 @@ function Category() {
     }
   })
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery<ICategory[]>({
     queryKey: ["category"],
     queryFn: async () => await getCategories()
   })
 
   const handleSubmit = useMutation(
-    async (category: any): Promise<void> => {
-      await addCategories(category)
+    async (category: ICategoryFormValues): Promise<void> => {
+       await addCategories(category);
     },
     {
       onSuccess: () => {
@@ -76,7 +77,7 @@ function Category() {
         </ActionIcon>
       </div>
       <Modal opened={opened} onClose={close} title="New Category">
-        <form onSubmit={form.onSubmit(values => {
+        <form onSubmit={form.onSubmit((values: ICategoryFormValues) => {
           handleSubmit.mutate(values);
           SuccessNotification(`Category: ${values.category} has been created!`, "")
         })}>
@@ -91,4 +92,4 @@ function Category() {
   )
 }
 
-export default Category
+export default Category;

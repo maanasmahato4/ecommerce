@@ -1,6 +1,7 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth.context";
+import { ICategory, ICategoryFormValues } from "../types/category.types";
 
 export const useCategoryApi = () => {
     const { token } = useContext(AuthContext);
@@ -13,18 +14,19 @@ export const useCategoryApi = () => {
         }
     });
 
-    const getCategories = async (): Promise<any> => {
+    const getCategories = async (): Promise<ICategory[]> => {
         const { data } = await categoryApi.get("/");
         return data;
     }
 
-    const addCategories = async (category: string): Promise<any> => {
+    const addCategories = async (category: ICategoryFormValues): Promise<any> => {
         const { data } = await categoryApi.post("/", category);
         return { data };
     }
 
     const deleteCategories = async (id: string): Promise<any> => {
         const { data } = await categoryApi.delete(`/${id}`);
+        console.log(data);
         return { data };
     }
 

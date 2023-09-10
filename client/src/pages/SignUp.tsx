@@ -5,6 +5,7 @@ import { useForm } from "@mantine/form";
 import { useAuthApi } from "../api/auth.api";
 import { AuthContext } from "../context/auth.context";
 import { useNavigate } from "react-router-dom";
+import { ISignClient } from "../types/auth.types";
 
 function SignUp() {
 
@@ -35,7 +36,7 @@ function SignUp() {
     }
   })
 
-  async function handleSubmit(signUpData: any) {
+  async function handleSubmit(signUpData: ISignClient) {
     try {
       if (signUpData.password === signUpData.confirm_password) {
         const finalFormData = {

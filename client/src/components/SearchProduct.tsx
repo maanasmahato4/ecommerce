@@ -1,22 +1,17 @@
-import { TextInput, Button, Flex } from "@mantine/core";
+import { TextInput, Flex, ActionIcon } from "@mantine/core";
 import { ChangeEvent, useContext } from "react";
-import { ProductContext } from "../context/product.context";
+import { FilterContext } from "../context/filter.context";
+import { IconClearAll } from "@tabler/icons-react";
 
-interface SearchProductProps {
-    setSearch: (value: string) => void;
-}
 
-function SearchProduct({ setSearch }: SearchProductProps) {
-    const { searchData, setSearchData } = useContext(ProductContext);
+function SearchProduct() {
+    const { searchParam, setSearchParam } = useContext(FilterContext);
     return (
         <Flex direction="row">
-            <TextInput placeholder="example: Bag" label="Search product" value={searchData || ''}
+            <TextInput placeholder="Search" value={searchParam || ''}
                 rightSection={
-                    <Button.Group>
-                        <Button onClick={() => setSearch(searchData)}>Search</Button>
-                        <Button color="red" onClick={() => {setSearchData(''); setSearch('');}}>Clear</Button>
-                    </Button.Group>
-                } style={{ width: "80%" }} onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchData(e.target.value)} />
+                    <ActionIcon color="red" onClick={() => { setSearchParam(''); }}><IconClearAll /></ActionIcon>
+                } style={{ width: "80%" }} onChange={(e: ChangeEvent<HTMLInputElement>) => { setSearchParam(e.target.value); }} />
         </Flex>
     )
 }

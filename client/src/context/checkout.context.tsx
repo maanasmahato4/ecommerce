@@ -1,9 +1,9 @@
 import { createContext, useState } from "react";
-import { ICartProduct } from "../types/product.types";
+import { IProduct } from "../types/product.types";
 
 interface ICheckOut {
-    checkOutList: Array<ICartProduct>
-    setCheckOutList: (checkOutList: any) => void
+    checkOutList: IProduct[];
+    setCheckOutList: (checkOutList: any) => void;
 }
 
 export const CheckOutContext = createContext<ICheckOut>({
@@ -13,7 +13,7 @@ export const CheckOutContext = createContext<ICheckOut>({
 
 
 export const CheckOutProvider = ({ children }: any) => {
-    const [checkOutList, setCheckOutList] = useState<Array<ICartProduct>>([]);
+    const [checkOutList, setCheckOutList] = useState<IProduct[]>([]);
     return <CheckOutContext.Provider value={{ checkOutList, setCheckOutList }}>
         {children}
     </CheckOutContext.Provider>

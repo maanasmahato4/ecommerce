@@ -3,12 +3,18 @@ import { Card } from "@mantine/core";
 import { useState, useEffect } from "react";
 import { useOrderApi } from "../api/order.api";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Label } from 'recharts';
+import { IGetOrder } from "../types/order.types";
+
+interface ChartData {
+  date: string;
+  orderCount: number;
+}
 
 function Stats() {
   const [productCount, setproductCount] = useState<number>(0);
   const [orderCount, setOrderCount] = useState<number>(0);
   const [revenue, setRevenue] = useState<number>(0);
-  const [orders, setOrders] = useState<Array<any>>([]);
+  const [orders, setOrders] = useState<IGetOrder[]>([]);
   const { getProductCount, getOrderCount, getTotalRevenue } = useStatsApi();
   const { getAllOrders } = useOrderApi();
 
@@ -30,7 +36,7 @@ function Stats() {
   }, [])
 
 
-  const aggregatedData: any = {};
+  const aggregatedData: Record<string, number> = {};
   orders.forEach(order => {
     const date = new Date(order.createdAt).toLocaleDateString();
     if (aggregatedData[date]) {
@@ -40,7 +46,7 @@ function Stats() {
     }
   });
 
-  const chartData = Object.keys(aggregatedData).map(date => ({
+  const chartData: ChartData[] = Object.keys(aggregatedData).map(date => ({
     date,
     orderCount: aggregatedData[date],
   }));

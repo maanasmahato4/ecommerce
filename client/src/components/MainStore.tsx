@@ -1,74 +1,44 @@
-import { Select, Button, Flex, Card, Image, Group, Text, Badge } from "@mantine/core";
+import {Button, Flex, Card, Image, Group, Text, Badge } from "@mantine/core";
 import { useProductApi } from "../api/products.api";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext} from "react";
 import { IGetProduct } from "../types/product.types";
-import { useCategoryApi } from "../api/category.api";
-import { CategoryContext } from "../context/category.context";
-import SearchProduct from "../components/SearchProduct";
 import { Carousel } from "@mantine/carousel";
 import { useNavigate } from "react-router-dom";
 import { ProductContext } from "../context/product.context";
 import { SuccessNotification } from "./Notification";
 import PaginationComponent from "./Pagination";
+import { FilterContext } from "../context/filter.context";
 
 function MainStore() {
-  const { setCategories } = useContext(CategoryContext);
   const { setProduct, setCartItem, cartItems } = useContext(ProductContext);
+  const {category, searchParam, priceRange} = useContext(FilterContext)
 
   const navigate = useNavigate();
 
   const { getProducts } = useProductApi();
-  const { getCategories } = useCategoryApi();
-  const [category, setCategory] = useState<string | undefined>("all");
-  const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
 
 
   const productQuery = useQuery({
-    queryKey: ["products", category, search, page],
-    queryFn: async () => await getProducts(category, search, page)
+    queryKey: ["products", category, searchParam, page, priceRange],
+    queryFn: async () => await getProducts(category, searchParam, page, priceRange)
   });
 
-  const categoryQuery = useQuery({
-    queryKey: ["category"],
-    queryFn: async () => await getCategories()
-  });
-
-  useEffect(() => {
-    if (categoryQuery.data) {
-      setCategories(categoryQuery.data);
-    }
-  }, [categoryQuery.data]);
 
 
-
-  if (productQuery.isLoading || categoryQuery.isLoading) {
+  if (productQuery.isLoading) {
     return <h1>loading...</h1>
   }
 
-  if (productQuery.isError || categoryQuery.isError) {
+  if (productQuery.isError) {
     return <h1>error..</h1>
   }
-
-  const CategorySelect = categoryQuery.data.map((item: { _id: string, category: string }, idx: number) => {
-    return { value: item.category, label: item.category, key: idx + 1 };
-  });
 
 
 
   return (
     <section style={{ position: "relative", minHeight: "100vh" }}>
-      <Flex direction="row" justify="space-between" wrap="wrap" mx="auto">
-        <div style={{ width: "80%" }}>
-          <SearchProduct setSearch={(value: string) => setSearch(value)} />
-        </div>
-        <Select label="Category" style={{ width: "20%" }} defaultValue={category} data={[
-          { value: "all", label: "all", key: 0 },
-          ...CategorySelect
-        ]} onChange={(value: any) => setCategory(value)} />
-      </Flex>
-
       <Flex direction="row" justify="center" wrap="wrap" mx="auto">
         {productQuery.data.map((product: IGetProduct, idx: number) => {
           const { _id, discount, imageUrls, price, productDescription, productName } = product;

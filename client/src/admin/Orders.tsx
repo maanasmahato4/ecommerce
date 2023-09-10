@@ -6,20 +6,29 @@ import OrderCard from "../components/OrderCard";
 import { Modal, Radio, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { SuccessNotification } from "../components/Notification";
+import { IOrder, IGetOrder, ICartItem } from "../types/order.types";
+
+interface IOption {
+  value: string,
+  label: string
+}
 
 function ManageOrders() {
   const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
-  const [item, setItem] = useState<any>();
+  const [item, setItem] = useState<IOrder>();
   const [selectedItemStatus, setSelectedItemStatus] = useState<string>("unlisted");
   const { getAllOrders, updateOrder } = useOrderApi();
   const { decodedToken } = useContext(AuthContext);
-  const ordersQuery = useQuery({
+
+  
+  const ordersQuery = useQuery<IGetOrder[]>({
     queryKey: ["orders", decodedToken],
     queryFn: async () => await getAllOrders()
   });
 
-  const handleStatusMutation = useMutation(async (values: any) => {
+
+  const handleStatusMutation = useMutation(async (values: (IGetOrder)) => {
     const id = values._id;
     let item = {...values, status: selectedItemStatus};
     await updateOrder(id, item);
@@ -40,7 +49,7 @@ function ManageOrders() {
     return <h1>error..</h1>
   }
 
-  const options = [
+  const options: IOption[] = [
     { value: "unlisted", label: "Unlisted" },
     { value: "cancelled", label: "Cancelled" },
     { value: "processing", label: "Processing" },
@@ -48,8 +57,8 @@ function ManageOrders() {
   ]
   return (
     <div style={{ margin: "0.5rem" }}>
-      {ordersQuery.data.map((item: any, idx: number) => {
-        const totalPrice = item.cartItems.reduce((total: number, cartItem: any) => {
+      {ordersQuery.data.map((item: IGetOrder, idx: number) => {
+        const totalPrice = item.cartItems.reduce((total: number, cartItem: ICartItem) => {
           const price = cartItem.product.price;
           const quantity = cartItem.quantity;
           return total + (price * quantity);
@@ -58,7 +67,7 @@ function ManageOrders() {
       })}
       <Modal opened={opened} onClose={close} title="Select Status">
         <Radio.Group>
-          {options.map((option: any, idx: number) => {
+          {options.map((option: IOption, idx: number) => {
             return <Radio value={option.value} label={option.label} key={idx} style={{ marginBlock: "0.5rem" }} checked={selectedItemStatus === option.value} onClick={() => setSelectedItemStatus(option.value)} />
           })}
         </Radio.Group>

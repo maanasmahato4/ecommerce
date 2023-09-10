@@ -21,7 +21,6 @@ function AboutProduct() {
             })}
           </Carousel>
         </Card.Section>
-        { /* RESPONSIVE BHAYEKO XAINA HAI FIX IT */ }
         <Card.Section>
           <h1>{productName}</h1>
           <p>Product Description: {productDescription}</p>

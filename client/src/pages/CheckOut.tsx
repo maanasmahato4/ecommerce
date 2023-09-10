@@ -2,10 +2,10 @@ import {useContext, useEffect} from "react";
 import { CheckOutContext } from "../context/checkout.context";
 import { Card, Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { ICartProduct } from "../types/product.types";
 import { AuthContext } from "../context/auth.context";
 import { useOrderApi } from "../api/order.api";
 import { SuccessNotification } from "../components/Notification";
+import { ICartItem } from "../types/order.types";
 
 interface FormData {
   name: string;
@@ -13,7 +13,7 @@ interface FormData {
   address: string;
   phone: string;
   status: string;
-  cartItems: Array<ICartProduct>
+  cartItems: ICartItem[]
 }
 
 

@@ -11,8 +11,6 @@ function PaginationComponent({page}: any) {
         const fetchProductCount = async () => {
             try {
                 const count = await getProductCount();
-
-                console.log(count);
                 setPageCount(Math.ceil(count / 5));
             } catch (error) {
                 console.error(error);

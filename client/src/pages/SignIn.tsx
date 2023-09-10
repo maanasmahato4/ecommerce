@@ -4,6 +4,7 @@ import { Fragment, useContext, useEffect } from "react";
 import { useAuthApi } from "../api/auth.api";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
+import { ILogClient } from "../types/auth.types";
 
 
 function SignIn() {
@@ -31,14 +32,12 @@ function SignIn() {
     }
   });
 
-  async function handleSubmit(signUpData: any) {
+  async function handleSubmit(signUpData: ILogClient) {
     try {
       if (signUpData.password === signUpData.confirm_password) {
         const finalFormData = {
-          username: signUpData.username,
           email: signUpData.email,
           password: signUpData.password,
-          roles: signUpData.roles
         }
         const res = await SignIn(finalFormData);
         setToken(res.data.access_token);

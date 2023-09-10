@@ -44,21 +44,31 @@ export class ProductsService {
 
         // sort
         let sort: any = req.query.sort || ["price"];
-        if(typeof req.query.sort == "string"){
+        if (typeof req.query.sort == "string") {
             req.query.sort ? (sort = req.query.sort.split(",")) : (sort = [sort]);
         }
         let sortBy = {};
-        if(sort[1]){
+        if (sort[1]) {
             sortBy[sort[0]] = sort[1];
         } else {
             sortBy[sort[0]] = "asc";
+        }
+
+        // price range
+        let priceRange: {low: number, high: number} = { low: 0, high: 1000000 };
+        if (typeof req.query.price_range == "string") {
+            try {
+                priceRange = JSON.parse(decodeURIComponent(req.query.price_range));
+            } catch (error) {
+                throw new BadRequestException("Invalid price range format");
+            }
         }
 
         // category
         let category = req.query.category || "all"
 
         // filtering
-        if(search){
+        if (search) {
             page = 0;
             limit = Infinity;
         }
@@ -67,10 +77,13 @@ export class ProductsService {
             productName: new RegExp(search, "i")
         }
 
-        if(!(category === "all")){
+        if (!(category === "all")) {
             filter.category = req.query.category;
         }
-     
+        if(req.query.price_range){
+            filter.price = {$gte: priceRange.low, $lte: priceRange.high}
+        }
+
         try {
             return await this.productModel.find(filter).limit(limit).sort(sortBy).skip(page * limit);
         } catch (err) {

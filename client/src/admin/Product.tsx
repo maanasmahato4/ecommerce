@@ -6,22 +6,22 @@ import { useProductApi } from "../api/products.api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useContext, useEffect } from "react";
 import ProductCard from "../components/ProductCard";
-import { IGetProduct } from "../types/product.types";
+import { IGetProduct, IProduct } from "../types/product.types";
 import { useCategoryApi } from "../api/category.api";
 import { CategoryContext } from "../context/category.context";
-import SearchProduct from "../components/SearchProduct";
 import { LoadingScreen } from "../components/LoadingScreen";
 import { SuccessNotification } from "../components/Notification";
 import PaginationComponent from "../components/Pagination";
+import { FilterContext } from "../context/filter.context";
 
 function Product() {
   const { setCategories } = useContext(CategoryContext);
+  const {searchParam, category, priceRange} = useContext(FilterContext);
+
 
   const [opened, { open, close }] = useDisclosure(false);
   const { addProduct, getProducts } = useProductApi();
   const { getCategories } = useCategoryApi();
-  const [category, setCategory] = useState<string | undefined>("all");
-  const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(1);
 
 
@@ -36,8 +36,8 @@ function Product() {
   }) */
 
   const productQuery = useQuery({
-    queryKey: ["products", category, search, page],
-    queryFn: async () => await getProducts(category, search, page)
+    queryKey: ["products", category, searchParam, page, priceRange ],
+    queryFn: async () => await getProducts(category, searchParam, page, priceRange)
   });
 
   const categoryQuery = useQuery({
@@ -51,7 +51,7 @@ function Product() {
     }
   }, [categoryQuery.data]);
 
-  
+
 
   const form = useForm({
     initialValues: {
@@ -67,7 +67,7 @@ function Product() {
   })
 
   const handleSubmitMutation = useMutation(
-    async (product: any): Promise<void> => {
+    async (product: IProduct): Promise<void> => {
       await addProduct(product);
       form.reset();
       SuccessNotification(`New product added!`, "");
@@ -95,23 +95,13 @@ function Product() {
 
   return (
     <section style={{ position: "relative", minHeight: "100vh" }}>
-      <Flex direction="row" justify="space-between" wrap="wrap" mx="auto">
-        <div style={{ width: "80%" }}>
-          <SearchProduct setSearch={(value: string) => setSearch(value)} />
-        </div>
-        <Select label="Category" style={{ width: "20%" }} defaultValue={category} data={[
-          { value: "all", label: "all", key: 0 },
-          ...CategorySelect
-        ]} onChange={(value: any) => setCategory(value)} />
-      </Flex>
-
       <Flex direction="row" justify="center" wrap="wrap" mx="auto">
         {productQuery.data.map((product: IGetProduct, idx: number) => {
           return <ProductCard key={idx} {...product} />
         })}
       </Flex>
       <div style={{ display: "flex", justifyContent: "center" }}>
-       <PaginationComponent page={(value: number) => setPage(value)}/>
+        <PaginationComponent page={(value: number) => setPage(value)} />
       </div>
       <div style={{ position: "fixed", bottom: "5rem", right: "10px" }}>
         <ActionIcon variant="filled" color="blue" size="2rem" onClick={open}>
@@ -119,7 +109,7 @@ function Product() {
         </ActionIcon>
       </div>
       <Modal opened={opened} onClose={close} title="New Product">
-        <form onSubmit={form.onSubmit(values => { handleSubmitMutation.mutate(values); })}>
+        <form onSubmit={form.onSubmit((values: any) => { handleSubmitMutation.mutate(values); })}>
           <TextInput label="Product Name" required withAsterisk {...form.getInputProps("productName", { type: "input" })} />
           <TextInput label="Product Description" required withAsterisk {...form.getInputProps("productDescription", { type: "input" })} />
           <NumberInput label="InStock" required withAsterisk {...form.getInputProps("inStock", { type: "input" })} />

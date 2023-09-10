@@ -20,6 +20,7 @@ import { AuthContext } from '../context/auth.context';
 import { useAuthApi } from '../api/auth.api';
 import "../styles/home.css";
 import { ProductProvider } from '../context/product.context';
+import Filter from '../components/Filter';
 
 
 function Home() {
@@ -50,6 +51,8 @@ function Home() {
           <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }}>
             <Link to="/" className="x-nav-links">Store</Link>
             <Link to="/orders" className="x-nav-links">Orders</Link>
+            <br></br>
+            <Filter/>
           </Navbar>
         }
         footer={

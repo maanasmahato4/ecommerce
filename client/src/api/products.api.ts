@@ -27,9 +27,13 @@ export const useProductApi = () => {
         }
     }
 
-    const getProducts = async (category: (string | undefined), search: (string | any), page: (number | any)): Promise<AxiosResponse<any, any>> => {
+    const getProducts = async (category: (string | undefined), search: (string | any), page: (number | any), priceRange: Record<string, number | any>): Promise<AxiosResponse<any, any>> => {
         try {
-            const url = `?search=${search}&category=${category}&limit=${5}&page=${page}`
+            // Convert the priceRange object to a query string format
+            const priceRangeQueryString = `${encodeURIComponent(
+                JSON.stringify(priceRange)
+            )}`;
+            const url = `?search=${search}&category=${category}&limit=${5}&page=${page}&price_range=${priceRangeQueryString}`
             const { data } = await productApi.get(url);
             return data;
         } catch (error: any) {
@@ -38,7 +42,7 @@ export const useProductApi = () => {
     }
 
     const addProduct = async (product: any): Promise<AxiosResponse<any, any>> => {
-        const { productName, productDescription, inStock, category, brandName, price, discount, imageUrls, images } = product;
+        const { productName, productDescription, inStock, category, brandName, price, discount, images } = product;
         try {
             const imageUploadPromises = images.map((image: any) => {
                 const imageRef = ref(Storage, `product/${image.name + "-" + Date.now()}`);
